@@ -1,4 +1,4 @@
-import { BuildConfig, BuildElectronConfig } from "./common";
+import { BuildConfig, BuildElectronConfig, buildMain } from "./common";
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
@@ -12,28 +12,28 @@ let electronConfig: BuildElectronConfig;
 let outFilePath = ""
 
 // 编译electron主程序
-const buildMain = () => {
-    // 入口文件
-    let entryFilePath = electronConfig.entry;
-    // 输出文件路径
-    outFilePath = path.join(buildConfig.build.outDir, electronConfig.outPut);
-    buildSync({
-        // 入口
-        entryPoints: [entryFilePath],
-        // 输出目录
-        outfile: outFilePath,
-        // 打包
-        bundle: true,
-        minify: false,
-        platform: "node",
-        // 启动sourcemap
-        sourcemap: false,
-        external: ["electron"],
-    })
-    let envScript = `process.env={...process.env,...${JSON.stringify(electronConfig.dev)}};`
-    let js = `${envScript}${os.EOL}${fs.readFileSync(outFilePath)}`;
-    fs.writeFileSync(outFilePath, js)
-}
+// const buildMain = () => {
+//     // 入口文件
+//     let entryFilePath = electronConfig.entry;
+//     // 输出文件路径
+//     outFilePath = path.join(buildConfig.build.outDir, electronConfig.outPut);
+//     buildSync({
+//         // 入口
+//         entryPoints: [entryFilePath],
+//         // 输出目录
+//         outfile: outFilePath,
+//         // 打包
+//         bundle: true,
+//         minify: false,
+//         platform: "node",
+//         // 启动sourcemap
+//         sourcemap: false,
+//         external: ["electron"],
+//     })
+//     let envScript = `process.env={...process.env,...${JSON.stringify(electronConfig.dev)}};`
+//     let js = `${envScript}${os.EOL}${fs.readFileSync(outFilePath)}`;
+//     fs.writeFileSync(outFilePath, js)
+// }
 
 // 使用electron启动进程
 const runElectron = () => {
@@ -65,7 +65,8 @@ export default (config: BuildConfig) => {
         buildConfig = config;
         electronConfig = config.electron!;
 
-        buildMain();
+        let envScript = `process.env={...process.env,...${JSON.stringify(electronConfig.dev)}};`;
+        outFilePath = buildMain(electronConfig, buildConfig, envScript);
         runElectron();
     }
 }
