@@ -1,9 +1,10 @@
 import { BuildConfig, BuildElectronConfig } from "./common";
 import path from 'path'
-import esbuild from 'esbuild'
 import fs from 'fs'
 import os from 'os'
 import { spawn } from 'child_process'
+import { buildSync } from 'esbuild'
+// const esbuild = require('esbuild')
 
 let buildConfig: BuildConfig;
 let electronConfig: BuildElectronConfig;
@@ -16,7 +17,7 @@ const buildMain = () => {
     let entryFilePath = electronConfig.entry;
     // 输出文件路径
     outFilePath = path.join(buildConfig.build.outDir, electronConfig.outPut);
-    esbuild.buildSync({
+    buildSync({
         // 入口
         entryPoints: [entryFilePath],
         // 输出目录

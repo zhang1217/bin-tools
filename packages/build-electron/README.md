@@ -5,7 +5,9 @@
 ## Usage
 
 ```
-const buildElectron = require('build-electron');
+const buildElectron = require('@bin-tools/build-electron');
+or
+import buildElectron from '@bin-tools/build-electron'
 
 // TODO: DEMONSTRATE API
 ```

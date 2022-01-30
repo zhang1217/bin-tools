@@ -1,9 +1,9 @@
 import { BuildConfig, BuildElectronConfig } from "./common";
 import path from 'path'
 import os from 'os'
-import esbuild from 'esbuild'
 import fs from 'fs'
-import builder from 'electron-builder'
+import { buildSync } from 'esbuild'
+import { build } from 'electron-builder'
 
 let buildConfig: BuildConfig;
 let electronConfig: BuildElectronConfig;
@@ -22,7 +22,7 @@ const buildMain = () => {
     let entryFilePath = electronConfig.entry;
     // 输出文件路径
     outFilePath = path.join(buildConfig.build.outDir, electronConfig.outPut);
-    esbuild.buildSync({
+    buildSync({
         // 入口
         entryPoints: [entryFilePath],
         // 输出目录
@@ -58,7 +58,7 @@ const preparePackageJson = () => {
 }
 // 使用electron-builder 打包
 const buildInstaller = () => {
-    builder.build(electronConfig.builderOptions)
+    build(electronConfig.builderOptions)
 }
 
 export default (config: BuildConfig) => {
