@@ -1,6 +1,6 @@
 {
   "name": "@bin-tools/build-electron",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "vite2 打包 electron",
   "author": "zbinbin",
   "keywords": [
