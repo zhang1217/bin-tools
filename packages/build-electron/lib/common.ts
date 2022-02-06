@@ -21,7 +21,9 @@ export interface BuildElectronConfig {
     dev: object;
     build: object;
     // 静态文件拷贝
-    staticDir: Array<BuildStaticDirConfig>
+    staticDir: Array<BuildStaticDirConfig>;
+    // 排除打包时的扩展
+    external: Array<string>
 }
 
 export interface BuildConfig extends ResolvedConfig {
@@ -42,11 +44,12 @@ export const buildMain = (electronConfig: BuildElectronConfig, buildConfig: Buil
         outfile: outFilePath,
         // 打包
         bundle: true,
+        // 压缩体积
         minify: false,
         platform: "node",
         // 启动sourcemap
         sourcemap: false,
-        external: ["electron"],
+        external: electronConfig.external ? electronConfig.external : ["electron"],
     })
     let js = `${envScript}${os.EOL}${fs.readFileSync(outFilePath)}`;
     fs.writeFileSync(outFilePath, js)
@@ -63,6 +66,5 @@ export const buildMain = (electronConfig: BuildElectronConfig, buildConfig: Buil
 export const copyDir = (from: string, to: string) => {
     const fromDir = path.resolve(process.cwd(), from)
     const toDir = path.resolve(process.cwd(), to)
-    console.log(fromDir, toDir)
     fs.copySync(fromDir, toDir, { recursive: true });
 }
